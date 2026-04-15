@@ -29,13 +29,14 @@ async function startServer() {
   // Gemini API Route
   app.post("/api/command", async (req, res) => {
     const { command, location } = req.body;
-    const apiKey = process.env.GEMINI_API_KEY;
+    const rawApiKey = process.env.GEMINI_API_KEY;
+    const apiKey = rawApiKey?.trim().replace(/^["']|["']$/g, '');
 
-    if (!apiKey) {
-      console.error("GEMINI_API_KEY is missing!");
+    if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey.length < 10) {
+      console.error("GEMINI_API_KEY is missing or invalid!");
       return res.status(500).json({ 
-        error: "GEMINI_API_KEY_MISSING",
-        message: "A chave de API não foi encontrada no ambiente do servidor." 
+        error: "GEMINI_API_KEY_INVALID",
+        message: "A chave de API não foi encontrada ou é inválida. Verifique seus Segredos (Secrets)." 
       });
     }
 
@@ -77,8 +78,16 @@ async function startServer() {
       const result = await model.generateContent([systemPrompt, locationContext, `Comando do usuário: ${command}`]);
       const response = await result.response;
       res.json({ text: response.text() });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini Error:", error);
+      
+      if (error.message?.includes("API key not valid") || error.message?.includes("API_KEY_INVALID")) {
+        return res.status(400).json({ 
+          error: "API_KEY_INVALID", 
+          message: "A chave de API fornecida é inválida. Verifique se copiou corretamente e se não há aspas extras." 
+        });
+      }
+      
       res.status(500).json({ error: "Falha ao processar comando com a IA." });
     }
   });

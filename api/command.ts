@@ -12,13 +12,14 @@ export default async function handler(req: any, res: any) {
   }
 
   const { command, location } = body || {};
-  const apiKey = process.env.GEMINI_API_KEY;
+  const rawApiKey = process.env.GEMINI_API_KEY;
+  const apiKey = rawApiKey?.trim().replace(/^["']|["']$/g, '');
 
-  if (!apiKey) {
-    console.error("CRITICAL: GEMINI_API_KEY is missing!");
+  if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey.length < 10) {
+    console.error("CRITICAL: GEMINI_API_KEY is missing or invalid placeholder!");
     return res.status(500).json({ 
-      error: "GEMINI_API_KEY_MISSING",
-      message: "A chave de API não foi encontrada no ambiente do servidor (Vercel/Cloud Run)." 
+      error: "GEMINI_API_KEY_INVALID",
+      message: "A chave de API não foi configurada ou é inválida. Verifique se você removeu as aspas e espaços." 
     });
   }
 
@@ -60,8 +61,16 @@ export default async function handler(req: any, res: any) {
     const result = await model.generateContent([systemPrompt, locationContext, `Comando do usuário: ${command}`]);
     const response = await result.response;
     res.status(200).json({ text: response.text() });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini Error:", error);
+    
+    if (error.message?.includes("API key not valid") || error.message?.includes("API_KEY_INVALID")) {
+      return res.status(400).json({ 
+        error: "API_KEY_INVALID", 
+        message: "A chave de API fornecida é inválida. Verifique se copiou corretamente do Google AI Studio e se não há aspas extras ou espaços." 
+      });
+    }
+    
     res.status(500).json({ error: "Falha ao processar comando com a IA." });
   }
 }
