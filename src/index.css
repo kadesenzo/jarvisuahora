@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-purple-500/20 rounded-full hover:bg-purple-500/40 transition-colors;
+  }
+  
+  .glass-panel {
+    @apply bg-slate-900/40 backdrop-blur-md border border-purple-500/20 shadow-[0_8px_32px_0_rgba(139,92,246,0.1)];
+  }
+  
+  .neon-text {
+    @apply text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)];
+  }
+
+  .neon-border {
+    @apply border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.3)];
+  }
+}

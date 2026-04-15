@@ -1,0 +1,8 @@
+{
+  "name": "Remix: JARVIS SENHOR tentando erro",
+  "description": "O assistente definitivo e respeitoso do Criador. Controle total sobre casa, aplicativos e agora com Protocolo de Visão para análise de tela.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ]
+}
