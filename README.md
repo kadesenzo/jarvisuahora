@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# JARVIS SENHOR - Guia de Configuração Profissional
 
-# Run and deploy your AI Studio app
+Este projeto foi estruturado para funcionar perfeitamente no **Google AI Studio** e na **Vercel**.
 
-This contains everything you need to run your app locally.
+## 🚀 Como colocar Online (Vercel)
 
-View your app in AI Studio: https://ai.studio/apps/45373035-73ef-4335-98e3-91cba3ca8e4d
+Para que o JARVIS funcione corretamente após o deploy, você **DEVE** configurar a chave de API manualmente por motivos de segurança. Nenhuma ferramenta pode "adivinhar" sua chave secreta automaticamente.
 
-## Run Locally
+### 1. Configurar Variáveis de Ambiente
+No painel da Vercel:
+1. Vá em **Settings** -> **Environment Variables**.
+2. Adicione uma nova variável:
+   - **Key:** `GEMINI_API_KEY`
+   - **Value:** (Sua chave obtida no Google AI Studio)
+3. Clique em **Save**.
 
-**Prerequisites:**  Node.js
+### 2. Realizar Redeploy
+**IMPORTANTE:** Se você adicionou a chave após o primeiro deploy, você deve:
+1. Ir na aba **Deployments**.
+2. Clicar nos três pontos `...` do último deploy.
+3. Selecionar **Redeploy**.
 
+## 🛠️ Estrutura do Projeto
+- `/api`: Contém as funções serverless para a Vercel (Backend seguro).
+- `/src`: Contém o código do Frontend (Interface do Jarvis).
+- `server.ts`: Servidor para desenvolvimento local e Cloud Run.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 🤖 Por que não é um arquivo .JAR?
+Este projeto é baseado em **Node.js e React** (tecnologia web moderna), e não em Java. Portanto, não existe um arquivo `.jar`. O resultado final é um site otimizado que roda diretamente no navegador.
+
+---
+*Gerado automaticamente pelo Protocolo de Assistência JARVIS.*
